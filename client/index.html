@@ -1,13 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
     <script type="text/babel" >
         "use strict";
-    
+        let socket;
+        let canvas;
+        let sendCanvas;
+        let ctx;
+        let sendCtx;
+        const init = () => {
+            canvas = document.querySelector('canvas');
+            ctx = canvas.getContext('2d');
+            socket = io.connect();
+
+            socket.on('connect', () => {
+                console.log("connected");
+                sendCanvas = document.createElement("canvas");
+                sendCanvas.height = 512;
+                sendCanvas.width = 512;
+                sendCtx = sendCanvas.getContext("2d");
+                let xPos = Math.floor(Math.random()*(480-50)+50);
+                let yPos = Math.floor(Math.random()*(480-50)+50);
+                sendCtx.fillStyle = "black";
+                sendCtx.fillRect(0, 0, 500, 500);
+                console.log("emit draw");
+                socket.emit("draw", {
+                    x: xPos, 
+                    y: yPos, 
+                    width: 50, 
+                    height: 50,
+                    imgData: sendCanvas.toDataURL()
+                });
+            });
+
+            socket.on('update', (data) => {
+                console.log("on client update");
+                let image = new Image();
+                image.onload = () => {
+                    ctx.save();
+                    ctx.globalCompositeOperation = "source-over";
+                    ctx.drawImage(image, data.x, data.y, data.width, data.height);
+                    ctx.restore();
+                };
+                image.src = data.imgData;
+                console.log("image set");
+            });
+        };
+        window.onload = init;
     </script>
 </head>
 <body>
-
+    <canvas id="canvas" height="512" width="512">No canvas</canvas>
 </body>
 </html>
