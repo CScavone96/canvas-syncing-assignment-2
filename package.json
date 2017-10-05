@@ -1,5 +1,5 @@
 {
-  "name": "canvas-syncing-assignment-part4",
+  "name": "canvas-syncing-assignment-2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IGM-Real-Time-at-RIT/canvas-syncing-assignment-part4.git"
+    "url": "git+https://github.com/IGM-Real-Time-at-RIT/canvas-syncing-assignment-2.git"
   },
   "author": "Clayton Scavone",
   "license": "ISC",
